@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Dream Farm Trust</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 48px;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    }
+
+    .logo h1 {
+      font-size: 28px;
+      color: #1C1917;
+      margin-bottom: 8px;
+    }
+
+    .logo p {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #10B981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 16px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      background: #FEE2E2;
+      border: 2px solid #EF4444;
+      color: #991B1B;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .demo-credentials {
+      background: #F0F9FF;
+      border: 2px solid #3B82F6;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 24px;
+    }
+
+    .demo-credentials h3 {
+      font-size: 14px;
+      color: #1E40AF;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .demo-credentials p {
+      font-size: 13px;
+      color: #1E3A8A;
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .demo-credentials .note {
+      font-size: 12px;
+      color: #60A5FA;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .security-note {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #E5E7EB;
+      text-align: center;
+      font-size: 12px;
+      color: #6B7280;
+    }
+
+    .security-note strong {
+      color: #1C1917;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 32px 24px;
+      }
+
+      .logo h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <div class="logo-icon">🥭</div>
+      <h1>Admin Portal</h1>
+      <p>Dream Farm Trust</p>
+    </div>
+
+    <div id="error-message" class="error-message">
+      Invalid username or password. Please try again.
+    </div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          placeholder="Enter your username"
+          autocomplete="username"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn-login">
+        🔐 Login to Admin Dashboard
+      </button>
+    </form>
+
+    <div class="demo-credentials">
+      <h3>🧪 Demo Credentials</h3>
+      <p><strong>Username:</strong> admin</p>
+      <p><strong>Password:</strong> dreamfarm2024</p>
+      <p class="note">
+        ⚠️ For production, change these credentials immediately and implement proper authentication.
+      </p>
+    </div>
+
+    <div class="security-note">
+      <strong>🔒 Secure Connection</strong>
+      Your login is encrypted. Never share your credentials.
+    </div>
+  </div>
+
+  <script>
+    // Admin credentials (DEMO - In production, use proper authentication)
+    const ADMIN_CREDENTIALS = {
+      username: 'admin',
+      password: 'dreamfarm2024' // SHA-256 hash in production
+    };
+
+    // Session management
+    const SESSION_KEY = 'dreamfarm_admin_session';
+    const SESSION_DURATION = 8 * 60 * 60 * 1000; // 8 hours
+
+    // Check if already logged in
+    function checkExistingSession() {
+      const session = localStorage.getItem(SESSION_KEY);
+      if (session) {
+        const sessionData = JSON.parse(session);
+        const now = new Date().getTime();
+        
+        if (now - sessionData.timestamp < SESSION_DURATION) {
+          // Valid session exists
+          window.location.href = 'admin-dashboard.html';
+          return true;
+        } else {
+          // Session expired
+          localStorage.removeItem(SESSION_KEY);
+        }
+      }
+      return false;
+    }
+
+    // Check on page load
+    checkExistingSession();
+
+    // Handle login form submission
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+
+      // Validate credentials
+      if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+        // Create session
+        const sessionData = {
+          username: username,
+          timestamp: new Date().getTime(),
+          role: 'admin'
+        };
+        
+        localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+        
+        // Redirect to dashboard
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        // Show error
+        errorMessage.classList.add('show');
+        
+        // Shake animation
+        document.querySelector('.login-container').style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          document.querySelector('.login-container').style.animation = '';
+        }, 500);
+
+        // Clear password field
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+      }
+    });
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+        20%, 40%, 60%, 80% { transform: translateX(10px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Clear error message when typing
+    document.getElementById('username').addEventListener('input', () => {
+      document.getElementById('error-message').classList.remove('show');
+    });
+    
+    document.getElementById('password').addEventListener('input', () => {
+      document.getElementById('error-message').classList.remove('show');
+    });
+
+    // Prevent back button after logout
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
+</body>
+</html>

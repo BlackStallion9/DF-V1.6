@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Your Box - Dream Farm Trust</title>
+  
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.5/babel.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: linear-gradient(135deg, #FDF4E3 0%, #F0E6D2 100%);
+      color: #1C1917;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .header h1 {
+      font-size: 36px;
+      color: #10B981;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Main Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Fruit Selection */
+    .fruits-section {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1C1917;
+    }
+
+    .fruits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .fruit-card {
+      border: 2px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      background: white;
+    }
+
+    .fruit-card:hover {
+      border-color: #10B981;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+    }
+
+    .fruit-card.selected {
+      border-color: #10B981;
+      background: #F0FDF4;
+    }
+
+    .fruit-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .fruit-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1C1917;
+    }
+
+    .fruit-origin {
+      font-size: 12px;
+      color: #6B7280;
+      margin-bottom: 8px;
+    }
+
+    .fruit-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #10B981;
+    }
+
+    .premium-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .quantity-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #10B981;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* Box Summary Sidebar */
+    .box-summary {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 20px;
+    }
+
+    .box-visual {
+      background: linear-gradient(135deg, #F0FDF4, #DBEAFE);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 3px dashed #10B981;
+    }
+
+    .box-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .box-slot {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #E5E7EB;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box-slot.filled {
+      border-color: #10B981;
+    }
+
+    .box-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .box-slot.empty {
+      font-size: 32px;
+      color: #D1D5DB;
+    }
+
+    .slot-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #EF4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .box-slot:hover .slot-remove {
+      opacity: 1;
+    }
+
+    .box-progress {
+      text-align: center;
+      font-size: 14px;
+      color: #6B7280;
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #E5E7EB;
+      border-radius: 999px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #059669);
+      border-radius: 999px;
+      transition: width 0.3s;
+    }
+
+    /* Pricing Breakdown */
+    .pricing {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 2px solid #E5E7EB;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .price-row.total {
+      font-size: 24px;
+      font-weight: 700;
+      color: #10B981;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid #E5E7EB;
+    }
+
+    .savings {
+      color: #EF4444;
+      font-weight: 600;
+    }
+
+    /* Subscription Toggle */
+    .subscription-toggle {
+      background: linear-gradient(135deg, #DBEAFE, #E0E7FF);
+      border: 2px solid #3B82F6;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .subscription-toggle:hover {
+      transform: scale(1.02);
+    }
+
+    .subscription-toggle.active {
+      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      color: white;
+    }
+
+    .toggle-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .toggle-checkbox {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .toggle-description {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 2px solid #E5E7EB;
+      color: #1C1917;
+      margin-top: 12px;
+    }
+
+    .btn-secondary:hover {
+      border-color: #10B981;
+      color: #10B981;
+    }
+
+    /* Messages */
+    .message {
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .message.info {
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 2px solid #3B82F6;
+    }
+
+    .message.warning {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 2px solid #F59E0B;
+    }
+
+    .message.success {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 2px solid #10B981;
+    }
+
+    /* Selected Fruits List */
+    .selected-fruits {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #E5E7EB;
+    }
+
+    .selected-fruit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #F9FAFB;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .selected-fruit-name {
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .selected-fruit-qty {
+      background: #10B981;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 12px;
+    }
+
+    .selected-fruit-price {
+      font-weight: 700;
+      color: #10B981;
+    }
+
+    /* Loading */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #10B981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      z-index: 9999;
+    }
+
+    .badge-small {
+      font-size: 11px;
+      background: #3B82F6;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="loading">Loading Dream Farm Trust...</div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // Fruit Database
+    const FRUITS = [
+      { id: 1, name: "Mango", origin: "Philippines", price: 5, premium: false, image: "https://images.unsplash.com/photo-1744374936847-16d0066d2314?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 2, name: "Dragonfruit", origin: "Vietnam", price: 8, premium: true, image: "https://images.unsplash.com/photo-1527325678964-54921661f888?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 3, name: "Passion Fruit", origin: "Brazil", price: 5, premium: false, image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 4, name: "Rambutan", origin: "Thailand", price: 12, premium: true, image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 5, name: "Papaya", origin: "Hawaii", price: 5, premium: false, image: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 6, name: "Lychee", origin: "China", price: 8, premium: true, image: "https://images.unsplash.com/photo-1609160403538-cf6e0ff6d1d6?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 7, name: "Starfruit", origin: "Malaysia", price: 5, premium: false, image: "https://images.unsplash.com/photo-1599629669098-e1c4d0d5b6a5?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 8, name: "Mangosteen", origin: "Indonesia", price: 12, premium: true, image: "https://images.unsplash.com/photo-1605887476601-5b9c660c8d9c?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 9, name: "Guava", origin: "Mexico", price: 5, premium: false, image: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 10, name: "Longan", origin: "Vietnam", price: 8, premium: true, image: "https://images.unsplash.com/photo-1625806786037-2af608423424?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+      { id: 11, name: "Kiwano", origin: "New Zealand", price: 10, premium: true, image: "https://images.unsplash.com/photo-1564632516-1e2629b60d0f?auto=format&fit=crop&w=400&q=80", category: "exotic" },
+      { id: 12, name: "Jackfruit", origin: "India", price: 5, premium: false, image: "https://images.unsplash.com/photo-1604431696980-07e3e6e1c0e5?auto=format&fit=crop&w=400&q=80", category: "tropical" },
+    ];
+
+    const BASE_BOX_SIZE = 6;
+    const BASE_BOX_PRICE = 35;
+    const SUBSCRIPTION_DISCOUNT = 0.15;
+    const FREE_SHIPPING_THRESHOLD = 65;
+
+    function BuildYourBoxApp() {
+      const [selectedFruits, setSelectedFruits] = useState({});
+      const [isSubscription, setIsSubscription] = useState(true);
+
+      // Calculate totals
+      const fruitCount = Object.values(selectedFruits).reduce((sum, qty) => sum + qty, 0);
+      
+      const subtotal = useMemo(() => {
+        const total = Object.entries(selectedFruits).reduce((sum, [fruitId, qty]) => {
+          const fruit = FRUITS.find(f => f.id === parseInt(fruitId));
+          if (!fruit) return sum;
+          
+          if (fruitCount <= BASE_BOX_SIZE) {
+            // All fruits covered by base price
+            return BASE_BOX_PRICE;
+          } else {
+            // Base price + additional fruits
+            if (sum === 0) sum = BASE_BOX_PRICE;
+            const additionalFruits = fruitCount - BASE_BOX_SIZE;
+            const fruitIndex = Object.keys(selectedFruits).indexOf(fruitId);
+            const cumulativeCount = Object.keys(selectedFruits)
+              .slice(0, fruitIndex + 1)
+              .reduce((count, id) => count + selectedFruits[id], 0);
+            
+            if (cumulativeCount > BASE_BOX_SIZE) {
+              const additionalQty = Math.min(qty, cumulativeCount - BASE_BOX_SIZE);
+              return sum + (fruit.price * additionalQty);
+            }
+            return sum;
+          }
+        }, 0);
+        
+        return total;
+      }, [selectedFruits, fruitCount]);
+
+      const discount = isSubscription ? subtotal * SUBSCRIPTION_DISCOUNT : 0;
+      const total = subtotal - discount;
+      const needsShipping = total < FREE_SHIPPING_THRESHOLD;
+
+      // Handle fruit selection
+      const handleFruitClick = (fruit) => {
+        setSelectedFruits(prev => {
+          const newSelected = { ...prev };
+          if (newSelected[fruit.id]) {
+            newSelected[fruit.id]++;
+          } else {
+            newSelected[fruit.id] = 1;
+          }
+          return newSelected;
+        });
+      };
+
+      const removeFruit = (fruitId) => {
+        setSelectedFruits(prev => {
+          const newSelected = { ...prev };
+          if (newSelected[fruitId] > 1) {
+            newSelected[fruitId]--;
+          } else {
+            delete newSelected[fruitId];
+          }
+          return newSelected;
+        });
+      };
+
+      const clearBox = () => {
+        setSelectedFruits({});
+      };
+
+      // Get selected fruit details for display
+      const selectedFruitsList = Object.entries(selectedFruits).map(([fruitId, qty]) => {
+        const fruit = FRUITS.find(f => f.id === parseInt(fruitId));
+        return { ...fruit, quantity: qty };
+      });
+
+      // Get first 6 fruits for visual box
+      const boxSlots = Array(Math.max(BASE_BOX_SIZE, fruitCount)).fill(null);
+      let fruitIndex = 0;
+      selectedFruitsList.forEach(fruit => {
+        for (let i = 0; i < fruit.quantity && fruitIndex < boxSlots.length; i++) {
+          boxSlots[fruitIndex] = fruit;
+          fruitIndex++;
+        }
+      });
+
+      const progress = Math.min((fruitCount / BASE_BOX_SIZE) * 100, 100);
+      const canCheckout = fruitCount >= BASE_BOX_SIZE;
+
+      return (
+        <div className="container">
+          {/* Header */}
+          <div className="header">
+            <h1>🥭 Build Your Own Exotic Fruit Box</h1>
+            <p>Choose any 6 fruits for ${BASE_BOX_PRICE} • Add more at individual prices • Subscribe and save 15%</p>
+          </div>
+
+          <div className="main-grid">
+            {/* Fruit Selection */}
+            <div className="fruits-section">
+              <h2 className="section-title">
+                Select Your Fruits
+                <span className="badge-small">{FRUITS.length} Available</span>
+              </h2>
+
+              {fruitCount < BASE_BOX_SIZE && (
+                <div className="message info">
+                  Choose {BASE_BOX_SIZE - fruitCount} more fruit{BASE_BOX_SIZE - fruitCount !== 1 ? 's' : ''} to complete your base box (${BASE_BOX_PRICE})
+                </div>
+              )}
+
+              {fruitCount >= BASE_BOX_SIZE && fruitCount < 10 && (
+                <div className="message success">
+                  Base box complete! Keep adding fruits at individual prices, or proceed to checkout.
+                </div>
+              )}
+
+              <div className="fruits-grid">
+                {FRUITS.map(fruit => (
+                  <div
+                    key={fruit.id}
+                    className={`fruit-card ${selectedFruits[fruit.id] ? 'selected' : ''}`}
+                    onClick={() => handleFruitClick(fruit)}
+                  >
+                    {fruit.premium && (
+                      <div className="premium-badge">⭐ Premium</div>
+                    )}
+                    {selectedFruits[fruit.id] && (
+                      <div className="quantity-badge">{selectedFruits[fruit.id]}</div>
+                    )}
+                    <img src={fruit.image} alt={fruit.name} className="fruit-image" />
+                    <div className="fruit-name">{fruit.name}</div>
+                    <div className="fruit-origin">From {fruit.origin}</div>
+                    <div className="fruit-price">
+                      {fruitCount < BASE_BOX_SIZE ? (
+                        <span>Included</span>
+                      ) : (
+                        <span>+${fruit.price}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Box Summary */}
+            <div className="box-summary">
+              <h2 className="section-title">Your Box</h2>
+
+              {/* Visual Box */}
+              <div className="box-visual">
+                <div className="box-slots">
+                  {boxSlots.slice(0, 9).map((fruit, index) => (
+                    <div key={index} className={`box-slot ${fruit ? 'filled' : 'empty'}`}>
+                      {fruit ? (
+                        <>
+                          <img src={fruit.image} alt={fruit.name} />
+                          <button
+                            className="slot-remove"
+                            onClick={() => removeFruit(fruit.id)}
+                            title="Remove one"
+                          >
+                            ×
+                          </button>
+                        </>
+                      ) : (
+                        <span>+</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="box-progress">
+                  {fruitCount} of {BASE_BOX_SIZE} minimum fruits
+                </div>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{ width: `${progress}%` }} />
+                </div>
+              </div>
+
+              {/* Selected Fruits List */}
+              {selectedFruitsList.length > 0 && (
+                <div className="selected-fruits">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <strong>Items ({fruitCount} fruits)</strong>
+                    <button onClick={clearBox} style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '14px', fontWeight: 600 }}>
+                      Clear All
+                    </button>
+                  </div>
+                  {selectedFruitsList.map(fruit => (
+                    <div key={fruit.id} className="selected-fruit-item">
+                      <span className="selected-fruit-name">{fruit.name}</span>
+                      <span className="selected-fruit-qty">×{fruit.quantity}</span>
+                      <span className="selected-fruit-price">
+                        {fruitCount <= BASE_BOX_SIZE ? 'Incl.' : `$${fruit.price * fruit.quantity}`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Subscription Toggle */}
+              <div
+                className={`subscription-toggle ${isSubscription ? 'active' : ''}`}
+                onClick={() => setIsSubscription(!isSubscription)}
+              >
+                <div className="toggle-header">
+                  <input
+                    type="checkbox"
+                    checked={isSubscription}
+                    onChange={() => {}}
+                    className="toggle-checkbox"
+                  />
+                  <span>Weekly Subscription</span>
+                </div>
+                <div className="toggle-description">
+                  Save 15% and get free shipping on all orders
+                </div>
+              </div>
+
+              {/* Pricing */}
+              <div className="pricing">
+                <div className="price-row">
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+
+                {isSubscription && discount > 0 && (
+                  <div className="price-row savings">
+                    <span>Subscription Savings (15%)</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                )}
+
+                {!needsShipping && isSubscription && (
+                  <div className="price-row" style={{ color: '#10B981', fontWeight: 600 }}>
+                    <span>Shipping</span>
+                    <span>FREE ✓</span>
+                  </div>
+                )}
+
+                {needsShipping && !isSubscription && (
+                  <div className="price-row" style={{ fontSize: '14px', color: '#6B7280' }}>
+                    <span>Shipping (calculated at checkout)</span>
+                    <span>$8.99+</span>
+                  </div>
+                )}
+
+                <div className="price-row total">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+
+                {needsShipping && !isSubscription && (
+                  <div className="message info" style={{ marginTop: '12px', fontSize: '12px', padding: '12px' }}>
+                    Add ${(FREE_SHIPPING_THRESHOLD - total).toFixed(2)} more for free shipping or subscribe!
+                  </div>
+                )}
+              </div>
+
+              {/* Checkout Button */}
+              <button
+                className="btn btn-primary"
+                disabled={!canCheckout}
+                onClick={() => alert(`Proceeding to checkout with ${fruitCount} fruits!\n\nTotal: $${total.toFixed(2)}\nSubscription: ${isSubscription ? 'Yes' : 'No'}\n\nIn production, this would redirect to Stripe checkout.`)}
+              >
+                {canCheckout ? `Proceed to Checkout` : `Add ${BASE_BOX_SIZE - fruitCount} More Fruit${BASE_BOX_SIZE - fruitCount !== 1 ? 's' : ''}`}
+              </button>
+
+              <button className="btn btn-secondary" onClick={() => window.location.href = '#shop'}>
+                Continue Shopping
+              </button>
+
+              {canCheckout && (
+                <div style={{ marginTop: '16px', fontSize: '12px', color: '#6B7280', textAlign: 'center' }}>
+                  🔒 Secure checkout powered by Stripe<br/>
+                  🚚 Ships within 24 hours
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    window.addEventListener('load', () => {
+      document.getElementById('loading').style.display = 'none';
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<BuildYourBoxApp />);
+    });
+  </script>
+</body>
+</html>

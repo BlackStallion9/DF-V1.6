@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Exotic Fruits - Dream Farm Trust</title>
+  
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.5/babel.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: #F9FAFB;
+      color: #1C1917;
+    }
+
+    /* Navigation - Same as landing page */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #1C1917;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .nav-logo-text {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #6B7280;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #10B981;
+    }
+
+    .nav-cart {
+      position: relative;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-count {
+      background: white;
+      color: #10B981;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #F0FDF4, #DBEAFE);
+      padding: 60px 24px 40px;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      font-size: 18px;
+      color: #6B7280;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+    }
+
+    /* Sidebar Filters */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .filter-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .filter-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1C1917;
+    }
+
+    .filter-group {
+      margin-bottom: 12px;
+    }
+
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .filter-checkbox:hover {
+      background: #F3F4F6;
+    }
+
+    .filter-checkbox input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .filter-checkbox label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      color: #4B5563;
+    }
+
+    .filter-count {
+      font-size: 12px;
+      color: #9CA3AF;
+    }
+
+    .clear-filters {
+      width: 100%;
+      padding: 10px;
+      background: #F3F4F6;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #6B7280;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .clear-filters:hover {
+      background: #E5E7EB;
+    }
+
+    /* Main Content */
+    .main-content {
+      min-height: 60vh;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      background: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 2px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-box input:focus {
+      border-color: #10B981;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9CA3AF;
+      font-size: 18px;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 8px;
+    }
+
+    .view-btn {
+      padding: 8px 16px;
+      border: 2px solid #E5E7EB;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6B7280;
+      transition: all 0.3s;
+    }
+
+    .view-btn.active {
+      background: #10B981;
+      border-color: #10B981;
+      color: white;
+    }
+
+    .results-count {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    /* Fruits Grid */
+    .fruits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .fruits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Fruit Card - Grid View */
+    .fruit-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .fruit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .fruit-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .fruit-badges {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 6px;
+      flex-direction: column;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .badge-premium {
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white;
+    }
+
+    .badge-new {
+      background: #3B82F6;
+      color: white;
+    }
+
+    .badge-popular {
+      background: #10B981;
+      color: white;
+    }
+
+    .fruit-info {
+      padding: 20px;
+    }
+
+    .fruit-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1C1917;
+    }
+
+    .fruit-origin {
+      font-size: 14px;
+      color: #6B7280;
+      margin-bottom: 12px;
+    }
+
+    .fruit-description {
+      font-size: 14px;
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .fruit-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #E5E7EB;
+    }
+
+    .fruit-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: #10B981;
+    }
+
+    .add-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Fruit Card - List View */
+    .fruit-card-list {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .fruit-card-list:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
+    .fruit-image-list {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #1C1917;
+    }
+
+    .empty-state p {
+      color: #6B7280;
+      margin-bottom: 24px;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 18px;
+      color: #6B7280;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .fruits-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links a:not(.nav-cart) {
+        display: none;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .search-box {
+        max-width: 100%;
+      }
+
+      .fruit-card-list {
+        grid-template-columns: 1fr;
+      }
+
+      .fruits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    // Complete fruit database
+    const FRUITS_DATABASE = [
+      {
+        id: 1,
+        name: "Mango",
+        origin: "Philippines",
+        price: 5,
+        category: "tropical",
+        description: "Sweet, creamy tropical fruit with golden flesh. Perfect balance of tangy and sweet.",
+        image: "https://images.unsplash.com/photo-1744374936847-16d0066d2314?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: true,
+        inSeason: true
+      },
+      {
+        id: 2,
+        name: "Dragonfruit",
+        origin: "Vietnam",
+        price: 8,
+        category: "tropical",
+        description: "Stunning pink exterior with white or red flesh. Mildly sweet with tiny black seeds.",
+        image: "https://images.unsplash.com/photo-1527325678964-54921661f888?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: false,
+        popular: true,
+        inSeason: true
+      },
+      {
+        id: 3,
+        name: "Passion Fruit",
+        origin: "Brazil",
+        price: 5,
+        category: "tropical",
+        description: "Intensely aromatic with sweet-tart pulp and crunchy seeds. Tropical explosion of flavor.",
+        image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: true,
+        inSeason: true
+      },
+      {
+        id: 4,
+        name: "Rambutan",
+        origin: "Thailand",
+        price: 12,
+        category: "exotic",
+        description: "Hairy red exterior conceals translucent white flesh. Sweet, grape-like flavor.",
+        image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: true,
+        popular: false,
+        inSeason: true
+      },
+      {
+        id: 5,
+        name: "Papaya",
+        origin: "Hawaii",
+        price: 5,
+        category: "tropical",
+        description: "Buttery smooth orange flesh with tropical sweetness. Rich in enzymes and vitamins.",
+        image: "https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: true,
+        inSeason: true
+      },
+      {
+        id: 6,
+        name: "Lychee",
+        origin: "China",
+        price: 8,
+        category: "exotic",
+        description: "Perfumed white flesh inside bumpy red shell. Floral notes with grape-like sweetness.",
+        image: "https://images.unsplash.com/photo-1609160403538-cf6e0ff6d1d6?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: false,
+        popular: true,
+        inSeason: false
+      },
+      {
+        id: 7,
+        name: "Starfruit",
+        origin: "Malaysia",
+        price: 5,
+        category: "tropical",
+        description: "Star-shaped slices with crisp texture. Mildly sweet with citrus notes.",
+        image: "https://images.unsplash.com/photo-1599629669098-e1c4d0d5b6a5?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: false,
+        inSeason: true
+      },
+      {
+        id: 8,
+        name: "Mangosteen",
+        origin: "Indonesia",
+        price: 12,
+        category: "exotic",
+        description: "Queen of fruits. Purple shell reveals white segments. Complex sweet-tart flavor.",
+        image: "https://images.unsplash.com/photo-1605887476601-5b9c660c8d9c?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: true,
+        popular: false,
+        inSeason: false
+      },
+      {
+        id: 9,
+        name: "Guava",
+        origin: "Mexico",
+        price: 5,
+        category: "tropical",
+        description: "Pink or white flesh with aromatic perfume. Sweet-tangy tropical taste.",
+        image: "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: true,
+        inSeason: true
+      },
+      {
+        id: 10,
+        name: "Longan",
+        origin: "Vietnam",
+        price: 8,
+        category: "exotic",
+        description: "Dragon's eye fruit. Translucent flesh similar to lychee but sweeter.",
+        image: "https://images.unsplash.com/photo-1625806786037-2af608423424?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: false,
+        popular: false,
+        inSeason: true
+      },
+      {
+        id: 11,
+        name: "Kiwano",
+        origin: "New Zealand",
+        price: 10,
+        category: "exotic",
+        description: "Horned melon with bright orange spiky shell. Green jelly-like interior tastes like cucumber-lime.",
+        image: "https://images.unsplash.com/photo-1564632516-1e2629b60d0f?auto=format&fit=crop&w=600&q=80",
+        premium: true,
+        new: true,
+        popular: false,
+        inSeason: false
+      },
+      {
+        id: 12,
+        name: "Jackfruit",
+        origin: "India",
+        price: 5,
+        category: "tropical",
+        description: "World's largest tree fruit. Sweet yellow pods with unique tropical flavor.",
+        image: "https://images.unsplash.com/photo-1604431696980-07e3e6e1c0e5?auto=format&fit=crop&w=600&q=80",
+        premium: false,
+        new: false,
+        popular: true,
+        inSeason: true
+      }
+    ];
+
+    function CatalogApp() {
+      const [searchTerm, setSearchTerm] = useState('');
+      const [selectedCategories, setSelectedCategories] = useState([]);
+      const [selectedOrigins, setSelectedOrigins] = useState([]);
+      const [priceRange, setPriceRange] = useState([]);
+      const [showInSeason, setShowInSeason] = useState(false);
+      const [showPremium, setShowPremium] = useState(false);
+      const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+      const [cart, setCart] = useState([]);
+
+      // Get unique categories and origins
+      const categories = [...new Set(FRUITS_DATABASE.map(f => f.category))];
+      const origins = [...new Set(FRUITS_DATABASE.map(f => f.origin))];
+
+      // Filter fruits
+      const filteredFruits = useMemo(() => {
+        return FRUITS_DATABASE.filter(fruit => {
+          // Search filter
+          if (searchTerm && !fruit.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+              !fruit.description.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return false;
+          }
+
+          // Category filter
+          if (selectedCategories.length > 0 && !selectedCategories.includes(fruit.category)) {
+            return false;
+          }
+
+          // Origin filter
+          if (selectedOrigins.length > 0 && !selectedOrigins.includes(fruit.origin)) {
+            return false;
+          }
+
+          // Price range filter
+          if (priceRange.length > 0) {
+            if (priceRange.includes('low') && fruit.price > 5) return false;
+            if (priceRange.includes('mid') && (fruit.price <= 5 || fruit.price > 10)) return false;
+            if (priceRange.includes('high') && fruit.price <= 10) return false;
+          }
+
+          // In season filter
+          if (showInSeason && !fruit.inSeason) return false;
+
+          // Premium filter
+          if (showPremium && !fruit.premium) return false;
+
+          return true;
+        });
+      }, [searchTerm, selectedCategories, selectedOrigins, priceRange, showInSeason, showPremium]);
+
+      const toggleCategory = (category) => {
+        setSelectedCategories(prev =>
+          prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+        );
+      };
+
+      const toggleOrigin = (origin) => {
+        setSelectedOrigins(prev =>
+          prev.includes(origin) ? prev.filter(o => o !== origin) : [...prev, origin]
+        );
+      };
+
+      const togglePriceRange = (range) => {
+        setPriceRange(prev =>
+          prev.includes(range) ? prev.filter(r => r !== range) : [...prev, range]
+        );
+      };
+
+      const clearFilters = () => {
+        setSearchTerm('');
+        setSelectedCategories([]);
+        setSelectedOrigins([]);
+        setPriceRange([]);
+        setShowInSeason(false);
+        setShowPremium(false);
+      };
+
+      const addToCart = (fruit) => {
+        setCart(prev => {
+          const existing = prev.find(item => item.id === fruit.id);
+          if (existing) {
+            return prev.map(item =>
+              item.id === fruit.id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+          }
+          return [...prev, { ...fruit, quantity: 1 }];
+        });
+      };
+
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+      const viewFruit = (fruitId) => {
+        window.location.href = `fruit-detail.html?id=${fruitId}`;
+      };
+
+      return (
+        <>
+          {/* Navigation */}
+          <nav className="nav">
+            <div className="nav-container">
+              <a href="landing-page.html" className="nav-logo">
+                <div className="nav-logo-icon">🥭</div>
+                <span className="nav-logo-text">Dream Farm Trust</span>
+              </a>
+              <div className="nav-links">
+                <a href="landing-page.html">Home</a>
+                <a href="catalog.html">Browse Fruits</a>
+                <a href="health-benefits.html">Health Benefits</a>
+                <a href="build-box.html" className="nav-cart">
+                  🛒 Box {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
+                </a>
+              </div>
+            </div>
+          </nav>
+
+          {/* Page Header */}
+          <div className="page-header">
+            <div className="header-container">
+              <h1>Browse Exotic Fruits</h1>
+              <p>Discover {FRUITS_DATABASE.length} rare fruits from around the world</p>
+            </div>
+          </div>
+
+          {/* Main Container */}
+          <div className="container">
+            {/* Sidebar Filters */}
+            <aside className="sidebar">
+              {/* Search */}
+              <div className="filter-section">
+                <h3>Search</h3>
+                <div className="search-box">
+                  <span className="search-icon">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Search fruits..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div className="filter-section">
+                <h3>Category</h3>
+                {categories.map(category => (
+                  <div key={category} className="filter-group">
+                    <div className="filter-checkbox">
+                      <input
+                        type="checkbox"
+                        id={`cat-${category}`}
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => toggleCategory(category)}
+                      />
+                      <label htmlFor={`cat-${category}`}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </label>
+                      <span className="filter-count">
+                        ({FRUITS_DATABASE.filter(f => f.category === category).length})
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Origin */}
+              <div className="filter-section">
+                <h3>Origin</h3>
+                {origins.map(origin => (
+                  <div key={origin} className="filter-group">
+                    <div className="filter-checkbox">
+                      <input
+                        type="checkbox"
+                        id={`origin-${origin}`}
+                        checked={selectedOrigins.includes(origin)}
+                        onChange={() => toggleOrigin(origin)}
+                      />
+                      <label htmlFor={`origin-${origin}`}>{origin}</label>
+                      <span className="filter-count">
+                        ({FRUITS_DATABASE.filter(f => f.origin === origin).length})
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Price Range */}
+              <div className="filter-section">
+                <h3>Price</h3>
+                <div className="filter-group">
+                  <div className="filter-checkbox">
+                    <input
+                      type="checkbox"
+                      id="price-low"
+                      checked={priceRange.includes('low')}
+                      onChange={() => togglePriceRange('low')}
+                    />
+                    <label htmlFor="price-low">Under $5</label>
+                  </div>
+                </div>
+                <div className="filter-group">
+                  <div className="filter-checkbox">
+                    <input
+                      type="checkbox"
+                      id="price-mid"
+                      checked={priceRange.includes('mid')}
+                      onChange={() => togglePriceRange('mid')}
+                    />
+                    <label htmlFor="price-mid">$5 - $10</label>
+                  </div>
+                </div>
+                <div className="filter-group">
+                  <div className="filter-checkbox">
+                    <input
+                      type="checkbox"
+                      id="price-high"
+                      checked={priceRange.includes('high')}
+                      onChange={() => togglePriceRange('high')}
+                    />
+                    <label htmlFor="price-high">$10+</label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Special Filters */}
+              <div className="filter-section">
+                <h3>Special</h3>
+                <div className="filter-group">
+                  <div className="filter-checkbox">
+                    <input
+                      type="checkbox"
+                      id="in-season"
+                      checked={showInSeason}
+                      onChange={() => setShowInSeason(!showInSeason)}
+                    />
+                    <label htmlFor="in-season">In Season</label>
+                  </div>
+                </div>
+                <div className="filter-group">
+                  <div className="filter-checkbox">
+                    <input
+                      type="checkbox"
+                      id="premium"
+                      checked={showPremium}
+                      onChange={() => setShowPremium(!showPremium)}
+                    />
+                    <label htmlFor="premium">Premium Only</label>
+                  </div>
+                </div>
+              </div>
+
+              <button className="clear-filters" onClick={clearFilters}>
+                Clear All Filters
+              </button>
+            </aside>
+
+            {/* Main Content */}
+            <main className="main-content">
+              {/* Toolbar */}
+              <div className="toolbar">
+                <div className="results-count">
+                  <strong>{filteredFruits.length}</strong> fruits found
+                </div>
+                <div className="view-toggle">
+                  <button
+                    className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    onClick={() => setViewMode('grid')}
+                  >
+                    Grid
+                  </button>
+                  <button
+                    className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                    onClick={() => setViewMode('list')}
+                  >
+                    List
+                  </button>
+                </div>
+              </div>
+
+              {/* Fruits Grid/List */}
+              {filteredFruits.length === 0 ? (
+                <div className="empty-state">
+                  <div className="empty-state-icon">🔍</div>
+                  <h3>No fruits found</h3>
+                  <p>Try adjusting your filters or search term</p>
+                  <button className="clear-filters" onClick={clearFilters}>
+                    Clear Filters
+                  </button>
+                </div>
+              ) : (
+                <div className={viewMode === 'grid' ? 'fruits-grid' : 'fruits-list'}>
+                  {filteredFruits.map(fruit => (
+                    viewMode === 'grid' ? (
+                      <div key={fruit.id} className="fruit-card" onClick={() => viewFruit(fruit.id)}>
+                        <img src={fruit.image} alt={fruit.name} className="fruit-image" />
+                        <div className="fruit-badges">
+                          {fruit.premium && <span className="badge badge-premium">⭐ Premium</span>}
+                          {fruit.new && <span className="badge badge-new">🆕 New</span>}
+                          {fruit.popular && <span className="badge badge-popular">🔥 Popular</span>}
+                        </div>
+                        <div className="fruit-info">
+                          <h3 className="fruit-name">{fruit.name}</h3>
+                          <p className="fruit-origin">From {fruit.origin}</p>
+                          <p className="fruit-description">{fruit.description}</p>
+                          <div className="fruit-footer">
+                            <span className="fruit-price">${fruit.price}</span>
+                            <button
+                              className="add-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addToCart(fruit);
+                              }}
+                            >
+                              Add to Box
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div key={fruit.id} className="fruit-card-list" onClick={() => viewFruit(fruit.id)}>
+                        <img src={fruit.image} alt={fruit.name} className="fruit-image-list" />
+                        <div>
+                          <h3 className="fruit-name">{fruit.name}</h3>
+                          <p className="fruit-origin">From {fruit.origin}</p>
+                          <p className="fruit-description">{fruit.description}</p>
+                          <div style={{ marginTop: '8px' }}>
+                            {fruit.premium && <span className="badge badge-premium">⭐ Premium</span>}
+                            {fruit.new && <span className="badge badge-new" style={{ marginLeft: '4px' }}>🆕 New</span>}
+                            {fruit.popular && <span className="badge badge-popular" style={{ marginLeft: '4px' }}>🔥 Popular</span>}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div className="fruit-price" style={{ marginBottom: '12px' }}>${fruit.price}</div>
+                          <button
+                            className="add-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart(fruit);
+                            }}
+                          >
+                            Add to Box
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  ))}
+                </div>
+              )}
+            </main>
+          </div>
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CatalogApp />);
+  </script>
+</body>
+</html>

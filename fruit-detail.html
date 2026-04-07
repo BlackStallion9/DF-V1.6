@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruit Details - Dream Farm Trust</title>
+  
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.5/babel.min.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: #F9FAFB;
+      color: #1C1917;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 1000; background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .nav-container {
+      max-width: 1400px; margin: 0 auto; padding: 16px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: #1C1917;
+    }
+
+    .nav-logo-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .container {
+      max-width: 1200px; margin: 40px auto; padding: 0 24px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 24px; font-size: 14px; color: #6B7280;
+    }
+
+    .breadcrumb a {
+      color: #10B981; text-decoration: none;
+    }
+
+    .product-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .image-gallery {
+      position: sticky; top: 100px; height: fit-content;
+    }
+
+    .main-image {
+      width: 100%; aspect-ratio: 1; object-fit: cover;
+      border-radius: 20px; margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    .thumbnail-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    }
+
+    .thumbnail {
+      width: 100%; aspect-ratio: 1; object-fit: cover;
+      border-radius: 8px; cursor: pointer; border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .thumbnail:hover, .thumbnail.active {
+      border-color: #10B981;
+    }
+
+    .product-info h1 {
+      font-size: 42px; font-weight: 800; margin-bottom: 12px;
+      color: #1C1917;
+    }
+
+    .origin {
+      font-size: 18px; color: #6B7280; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .badges {
+      display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 6px 12px; border-radius: 12px; font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-premium {
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white;
+    }
+
+    .badge-season {
+      background: #10B981; color: white;
+    }
+
+    .price {
+      font-size: 48px; font-weight: 800; color: #10B981;
+      margin-bottom: 24px;
+    }
+
+    .description {
+      font-size: 16px; line-height: 1.8; color: #4B5563;
+      margin-bottom: 32px;
+    }
+
+    .add-section {
+      background: white; padding: 24px; border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin-bottom: 32px;
+    }
+
+    .quantity-selector {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    }
+
+    .quantity-btn {
+      width: 40px; height: 40px; border-radius: 8px;
+      border: 2px solid #E5E7EB; background: white;
+      font-size: 20px; font-weight: 700; cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .quantity-btn:hover {
+      border-color: #10B981; color: #10B981;
+    }
+
+    .quantity-display {
+      font-size: 24px; font-weight: 700; min-width: 40px;
+      text-align: center;
+    }
+
+    .add-btn {
+      width: 100%; padding: 18px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white; font-size: 18px; font-weight: 700;
+      cursor: pointer; transition: all 0.3s;
+    }
+
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .tabs {
+      display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 2px solid #E5E7EB;
+    }
+
+    .tab {
+      padding: 12px 24px; border: none; background: none;
+      font-size: 16px; font-weight: 600; color: #6B7280;
+      cursor: pointer; border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      color: #10B981; border-bottom-color: #10B981;
+    }
+
+    .tab-content {
+      background: white; padding: 32px; border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 40px;
+    }
+
+    .health-benefits {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    }
+
+    .benefit-card {
+      padding: 20px; background: #F0FDF4; border-radius: 12px;
+      border-left: 4px solid #10B981;
+    }
+
+    .benefit-icon {
+      font-size: 32px; margin-bottom: 8px;
+    }
+
+    .benefit-title {
+      font-size: 16px; font-weight: 700; margin-bottom: 4px;
+      color: #1C1917;
+    }
+
+    .benefit-description {
+      font-size: 14px; color: #4B5563; line-height: 1.6;
+    }
+
+    .disclaimer {
+      background: #FEF3C7; border-left: 4px solid #F59E0B;
+      padding: 16px; border-radius: 8px; margin-top: 32px;
+    }
+
+    .disclaimer-title {
+      font-weight: 700; color: #92400E; margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .disclaimer-text {
+      font-size: 12px; color: #78350F; line-height: 1.6;
+    }
+
+    .taste-profile {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .taste-item {
+      text-align: center; padding: 20px; background: #F9FAFB;
+      border-radius: 12px;
+    }
+
+    .taste-label {
+      font-size: 12px; color: #6B7280; margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+    }
+
+    .taste-value {
+      font-size: 18px; font-weight: 700; color: #1C1917;
+    }
+
+    .how-to-section h3 {
+      font-size: 20px; font-weight: 700; margin-bottom: 16px;
+      color: #1C1917;
+    }
+
+    .how-to-section p, .how-to-section ul {
+      font-size: 15px; line-height: 1.8; color: #4B5563;
+      margin-bottom: 16px;
+    }
+
+    .how-to-section ul {
+      margin-left: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .health-benefits, .taste-profile { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Complete fruit database with health benefits
+    const FRUITS_DATABASE = {
+      1: {
+        id: 1,
+        name: "Mango",
+        origin: "Philippines",
+        price: 5,
+        description: "Often called the 'king of fruits,' mangoes from the Philippines are renowned for their exceptional sweetness and smooth, buttery texture. Each fruit is hand-picked at peak ripeness by our partner farmers who have been cultivating mangoes for three generations.",
+        images: [
+          "https://images.unsplash.com/photo-1744374936847-16d0066d2314?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1591984010940-5a80f1e9f5d1?auto=format&fit=crop&w=800&q=80"
+        ],
+        premium: false,
+        inSeason: true,
+        taste: {
+          sweetness: "Very High",
+          tartness: "Low",
+          texture: "Creamy"
+        },
+        healthBenefits: [
+          { icon: "🍊", title: "Rich in Vitamin C", description: "One mango provides up to 67% of daily vitamin C needs, supporting immune function and skin health" },
+          { icon: "💚", title: "Powerful Antioxidants", description: "Contains polyphenols and beta-carotene that may help fight free radicals and oxidative stress" },
+          { icon: "🌾", title: "Digestive Health", description: "High fiber content and digestive enzymes may aid gut health and regularity" },
+          { icon: "👁️", title: "Eye Health Support", description: "Rich in vitamin A and zeaxanthin, nutrients associated with maintaining healthy vision" },
+          { icon: "❤️", title: "Heart Health", description: "Potassium and magnesium content may help support healthy blood pressure levels" },
+          { icon: "✨", title: "Skin Radiance", description: "Vitamin C and antioxidants may promote collagen production for healthy, glowing skin" },
+          { icon: "⚡", title: "Natural Energy", description: "Natural fruit sugars provide quick, sustained energy without the crash" },
+          { icon: "🧬", title: "Anti-Inflammatory Properties", description: "Mangiferin and other compounds may have anti-inflammatory effects" },
+          { icon: "💧", title: "Hydration Support", description: "Contains about 84% water content, helping maintain proper hydration" },
+          { icon: "🌿", title: "Traditional Wellness", description: "Used in Ayurvedic medicine for centuries to support digestive and metabolic health" }
+        ],
+        howToEat: {
+          ripeness: "Ripe when slightly soft to touch and fragrant near the stem. Skin may have yellow-red blush.",
+          storage: "Keep at room temperature until ripe, then refrigerate for up to 5 days.",
+          preparation: "Cut along the flat seed, score flesh in a grid pattern, push skin to pop cubes out.",
+          serving: "Eat fresh, blend into smoothies, add to salsa, or grill for caramelized sweetness."
+        }
+      },
+      2: {
+        id: 2,
+        name: "Dragonfruit",
+        origin: "Vietnam",
+        price: 8,
+        description: "This stunning tropical cactus fruit boasts vibrant pink skin and speckled white or red flesh. Grown in the volcanic soils of Vietnam's Mekong Delta, our dragonfruit is harvested at night when sugar levels peak, ensuring maximum flavor.",
+        images: [
+          "https://images.unsplash.com/photo-1527325678964-54921661f888?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1615485500181-23d0c50d5e0d?auto=format&fit=crop&w=800&q=80"
+        ],
+        premium: true,
+        inSeason: true,
+        taste: {
+          sweetness: "Mild-Medium",
+          tartness: "Very Low",
+          texture: "Crisp, Refreshing"
+        },
+        healthBenefits: [
+          { icon: "🔴", title: "Rich in Antioxidants", description: "Contains betalains and flavonoids that may help protect cells from oxidative damage" },
+          { icon: "🌾", title: "Prebiotic Fiber", description: "High in prebiotics that may support healthy gut bacteria and digestive wellness" },
+          { icon: "💎", title: "Low in Calories", description: "Nutrient-dense yet low-calorie fruit, with less than 60 calories per 100g serving" },
+          { icon: "💪", title: "Iron Content", description: "Contains iron which is essential for healthy blood and oxygen transport" },
+          { icon: "🛡️", title: "Immune Boosting", description: "Vitamin C content may help strengthen immune defenses and fight common illnesses" },
+          { icon: "✨", title: "Anti-Aging Properties", description: "Antioxidants may help reduce signs of aging by fighting free radical damage" },
+          { icon: "💧", title: "Hydrating", description: "High water content (over 80%) helps maintain proper hydration levels" },
+          { icon: "🩺", title: "Blood Sugar Friendly", description: "May help regulate blood sugar levels when consumed as part of a balanced diet" },
+          { icon: "🧠", title: "Brain Health", description: "Contains magnesium and B vitamins that support healthy brain function" },
+          { icon: "🌸", title: "Traditional Beauty", description: "Used traditionally in Southeast Asia for skin health and radiance" }
+        ],
+        howToEat: {
+          ripeness: "Ripe when skin is bright pink/red and gives slightly to pressure. Avoid brown spots.",
+          storage: "Store at room temperature for 2-3 days or refrigerate for up to a week.",
+          preparation: "Cut in half and scoop out flesh with a spoon, or peel skin and dice flesh into cubes.",
+          serving: "Perfect in fruit bowls, smoothies, or as a refreshing sorbet. Mild flavor pairs with citrus."
+        }
+      }
+    };
+
+    // Add the remaining fruits with complete health benefits...
+    FRUITS_DATABASE[3] = {
+      id: 3,
+      name: "Passion Fruit",
+      origin: "Brazil",
+      price: 5,
+      description: "Bursting with tropical flavor, these Brazilian passion fruits pack an intense aromatic punch. The golden pulp filled with crunchy seeds delivers a perfect balance of sweet and tart that's truly addictive.",
+      images: [
+        "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1593377073269-7170d9cfdb3e?auto=format&fit=crop&w=800&q=80"
+      ],
+      premium: false,
+      inSeason: true,
+      taste: { sweetness: "Medium", tartness: "High", texture: "Juicy, Seedy" },
+      healthBenefits: [
+        { icon: "😴", title: "Sleep Support", description: "Contains alkaloids that may promote relaxation and better sleep quality" },
+        { icon: "🌾", title: "Fiber Rich", description: "High in dietary fiber which supports digestive health and regularity" },
+        { icon: "🍊", title: "Vitamin C Powerhouse", description: "Exceptional source of vitamin C for immune support and skin health" },
+        { icon: "🛡️", title: "Antioxidant Protection", description: "Loaded with beta-carotene and polyphenols that combat oxidative stress" },
+        { icon: "❤️", title: "Heart Health", description: "Potassium content may help maintain healthy blood pressure levels" },
+        { icon: "🧘", title: "Anxiety Relief", description: "May have calming effects and help reduce anxiety when consumed regularly" },
+        { icon: "🦴", title: "Bone Health", description: "Contains minerals like iron, magnesium, and phosphorus for bone strength" },
+        { icon: "👁️", title: "Vision Support", description: "Rich in vitamin A which is essential for maintaining healthy eyesight" },
+        { icon: "💪", title: "Athletic Recovery", description: "Natural electrolytes may aid in post-exercise hydration and recovery" },
+        { icon: "🌺", title: "Traditional Medicine", description: "Used in South American folk medicine for its calming and therapeutic properties" }
+      ],
+      howToEat: {
+        ripeness: "Ripe when skin is wrinkled and purple. Smooth skin means it needs more time.",
+        storage: "Store at room temperature until wrinkled, then refrigerate for up to 2 weeks.",
+        preparation: "Cut in half and scoop out pulp with a spoon. Strain for juice or eat seeds and all.",
+        serving: "Perfect over yogurt, in cocktails, pavlova topping, or blended into smoothies."
+      }
+    };
+
+    function FruitDetailApp() {
+      const [selectedImage, setSelectedImage] = useState(0);
+      const [quantity, setQuantity] = useState(1);
+      const [activeTab, setActiveTab] = useState('benefits');
+
+      // Get fruit ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const fruitId = parseInt(urlParams.get('id')) || 1;
+      const fruit = FRUITS_DATABASE[fruitId] || FRUITS_DATABASE[1];
+
+      const addToBox = () => {
+        alert(`Added ${quantity} ${fruit.name}(s) to your box!\n\nIn production, this would add to the shopping cart.`);
+      };
+
+      return (
+        <>
+          <nav className="nav">
+            <div className="nav-container">
+              <a href="landing-page.html" className="nav-logo">
+                <div className="nav-logo-icon">🥭</div>
+                <span style={{fontSize:'20px',fontWeight:700}}>Dream Farm Trust</span>
+              </a>
+            </div>
+          </nav>
+
+          <div className="container">
+            <div className="breadcrumb">
+              <a href="landing-page.html">Home</a> / <a href="catalog.html">Browse Fruits</a> / {fruit.name}
+            </div>
+
+            <div className="product-grid">
+              {/* Image Gallery */}
+              <div className="image-gallery">
+                <img src={fruit.images[selectedImage]} alt={fruit.name} className="main-image" />
+                <div className="thumbnail-grid">
+                  {fruit.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`${fruit.name} ${idx + 1}`}
+                      className={`thumbnail ${selectedImage === idx ? 'active' : ''}`}
+                      onClick={() => setSelectedImage(idx)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Product Info */}
+              <div className="product-info">
+                <h1>{fruit.name}</h1>
+                <div className="origin">📍 From {fruit.origin}</div>
+                
+                <div className="badges">
+                  {fruit.premium && <span className="badge badge-premium">⭐ Premium</span>}
+                  {fruit.inSeason && <span className="badge badge-season">🌱 In Season</span>}
+                </div>
+
+                <div className="price">${fruit.price}</div>
+
+                <p className="description">{fruit.description}</p>
+
+                <div className="add-section">
+                  <div className="quantity-selector">
+                    <button className="quantity-btn" onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button>
+                    <div className="quantity-display">{quantity}</div>
+                    <button className="quantity-btn" onClick={() => setQuantity(quantity + 1)}>+</button>
+                  </div>
+                  <button className="add-btn" onClick={addToBox}>
+                    Add {quantity} to Box - ${(fruit.price * quantity).toFixed(2)}
+                  </button>
+                </div>
+
+                <div className="taste-profile">
+                  <div className="taste-item">
+                    <div className="taste-label">Sweetness</div>
+                    <div className="taste-value">{fruit.taste.sweetness}</div>
+                  </div>
+                  <div className="taste-item">
+                    <div className="taste-label">Tartness</div>
+                    <div className="taste-value">{fruit.taste.tartness}</div>
+                  </div>
+                  <div className="taste-item">
+                    <div className="taste-label">Texture</div>
+                    <div className="taste-value">{fruit.taste.texture}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="tabs">
+              <button className={`tab ${activeTab === 'benefits' ? 'active' : ''}`} onClick={() => setActiveTab('benefits')}>
+                Health Benefits
+              </button>
+              <button className={`tab ${activeTab === 'howto' ? 'active' : ''}`} onClick={() => setActiveTab('howto')}>
+                How to Enjoy
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === 'benefits' && (
+              <div className="tab-content">
+                <h2 style={{fontSize:'28px',fontWeight:800,marginBottom:'24px'}}>10 Health Benefits of {fruit.name}</h2>
+                <div className="health-benefits">
+                  {fruit.healthBenefits.map((benefit, idx) => (
+                    <div key={idx} className="benefit-card">
+                      <div className="benefit-icon">{benefit.icon}</div>
+                      <div className="benefit-title">{benefit.title}</div>
+                      <div className="benefit-description">{benefit.description}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="disclaimer">
+                  <div className="disclaimer-title">⚠️ Health Benefits Disclaimer</div>
+                  <div className="disclaimer-text">
+                    These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. The health benefits listed are based on traditional use, nutritional content, and general wellness properties. Individual results may vary. Consult with a healthcare professional before making dietary changes, especially if you have existing health conditions or are taking medications.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'howto' && (
+              <div className="tab-content how-to-section">
+                <h3>🔍 How to Tell It's Ripe</h3>
+                <p>{fruit.howToEat.ripeness}</p>
+
+                <h3>📦 Storage Tips</h3>
+                <p>{fruit.howToEat.storage}</p>
+
+                <h3>🔪 How to Prepare</h3>
+                <p>{fruit.howToEat.preparation}</p>
+
+                <h3>🍽️ Serving Suggestions</h3>
+                <p>{fruit.howToEat.serving}</p>
+              </div>
+            )}
+          </div>
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<FruitDetailApp />);
+  </script>
+</body>
+</html>

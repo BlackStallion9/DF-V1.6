@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Farm Trust - Exotic Fruit Delivered Weekly</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      color: #1C1917;
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+
+    .nav.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #1C1917;
+    }
+
+    .nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .nav-logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #6B7280;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #10B981;
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 90vh;
+      background: linear-gradient(135deg, #F0FDF4 0%, #DBEAFE 100%);
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=2400&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content h1 {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-content p {
+      font-size: 20px;
+      color: #6B7280;
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #10B981;
+      border: 2px solid #10B981;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #10B981;
+      border: 2px solid #10B981;
+    }
+
+    .btn-secondary:hover {
+      background: #F0FDF4;
+    }
+
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .stars {
+      color: #F59E0B;
+      font-size: 18px;
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-image {
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    .floating-badge {
+      position: absolute;
+      background: white;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      font-weight: 700;
+      z-index: 3;
+    }
+
+    .floating-badge-1 {
+      top: 10%;
+      right: -10%;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+    }
+
+    .floating-badge-2 {
+      bottom: 10%;
+      left: -10%;
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 24px;
+      background: white;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #1C1917;
+    }
+
+    .section-header p {
+      font-size: 20px;
+      color: #6B7280;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 32px;
+      border-radius: 20px;
+      background: #F9FAFB;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #1C1917;
+    }
+
+    .feature-card p {
+      color: #6B7280;
+      line-height: 1.7;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 100px 24px;
+      background: linear-gradient(135deg, #F0FDF4, #F0F9FF);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .step-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -20px;
+      left: 40px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .step-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      margin-top: 20px;
+      color: #1C1917;
+    }
+
+    .step-card p {
+      color: #6B7280;
+      line-height: 1.7;
+    }
+
+    /* Social Proof */
+    .social-proof {
+      padding: 100px 24px;
+      background: white;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+    }
+
+    .testimonial-card {
+      background: #F9FAFB;
+      padding: 32px;
+      border-radius: 20px;
+      border: 2px solid #E5E7EB;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10B981, #3B82F6);
+    }
+
+    .testimonial-name {
+      font-weight: 700;
+      color: #1C1917;
+    }
+
+    .testimonial-location {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .testimonial-stars {
+      color: #F59E0B;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-text {
+      color: #4B5563;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    .press-logos {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 2px solid #E5E7EB;
+    }
+
+    .press-logos h3 {
+      font-size: 14px;
+      color: #6B7280;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .logos-grid {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #9CA3AF;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 100px 24px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      text-align: center;
+      color: white;
+    }
+
+    .final-cta h2 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .final-cta p {
+      font-size: 20px;
+      margin-bottom: 40px;
+      opacity: 0.95;
+    }
+
+    /* Footer */
+    .footer {
+      background: #1C1917;
+      color: white;
+      padding: 60px 24px 24px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+
+    .footer-about h3 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .footer-about p {
+      color: #9CA3AF;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .footer-section h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: #9CA3AF;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #10B981;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 40px;
+      border-top: 1px solid #374151;
+      text-align: center;
+      color: #9CA3AF;
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-content h1 {
+        font-size: 48px;
+      }
+
+      .hero-cta-group {
+        justify-content: center;
+      }
+
+      .features-grid,
+      .steps-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-content h1 {
+        font-size: 36px;
+      }
+
+      .hero-cta-group {
+        flex-direction: column;
+      }
+
+      .floating-badge {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">🥭</div>
+        <span class="nav-logo-text">Dream Farm Trust</span>
+      </a>
+      <div class="nav-links">
+        <a href="catalog.html">Browse Fruits</a>
+        <a href="health-benefits.html">Health Benefits</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#reviews">Reviews</a>
+        <a href="build-box.html" class="nav-cta">Build Your Box</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1>Discover Exotic Fruits From Around The World</h1>
+        <p>Fresh, rare, delivered weekly. Partner with family farms across 12 countries. Build your custom box starting at just $35.</p>
+        
+        <div class="hero-badges">
+          <span class="badge">🌴 50+ Exotic Fruits</span>
+          <span class="badge">📦 Free Shipping</span>
+          <span class="badge">♻️ Carbon Neutral</span>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="build-box.html" class="btn btn-primary">Build Your Box - $35</a>
+          <a href="catalog.html" class="btn btn-secondary">Browse All Fruits</a>
+        </div>
+
+        <div class="hero-trust">
+          <span class="stars">★★★★★</span>
+          <span>4.9/5 from 2,847 happy customers</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80" alt="Exotic fruits" class="hero-image">
+        <div class="floating-badge floating-badge-1">
+          🎉 New: Pink Pineapple
+        </div>
+        <div class="floating-badge floating-badge-2">
+          🔥 Only 47 boxes left
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="features-container">
+      <div class="section-header">
+        <h2>Why Choose Dream Farm Trust?</h2>
+        <p>We're not just delivering fruit — we're sharing stories from farmers around the world</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3>Direct from Family Farms</h3>
+          <p>We partner with small family farms across Asia, Latin America, and the Pacific. Meet the farmers who grow your fruit.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Fresh-Picked, Fast Shipped</h3>
+          <p>Harvested on Monday, packed on Tuesday, at your door by Thursday. Farm to table in 72 hours.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎁</div>
+          <h3>Weekly New Arrivals</h3>
+          <p>50+ exotic fruits rotating seasonally. Discover rare varieties you won't find at grocery stores.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">♻️</div>
+          <h3>100% Sustainable</h3>
+          <p>Carbon-neutral shipping, compostable packaging, zero waste. Good for you, good for the planet.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Learn As You Taste</h3>
+          <p>Every box includes fruit care guides, recipe ideas, and the story behind each fruit.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">❤️</div>
+          <h3>Love It Guarantee</h3>
+          <p>Not satisfied? We'll refund or replace, no questions asked. Your happiness is our mission.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>From your first click to your first bite — here's the journey</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Build Your Box</h3>
+        <p>Choose any 6 fruits for $35. Browse our selection of 50+ exotic fruits, all fresh-picked and ready to ship. Add more fruits at individual prices.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Choose Delivery</h3>
+        <p>Select from UPS Ground (3-5 days), 2-Day Air, or Next Day. Subscribe weekly and get free shipping forever.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Enjoy & Discover</h3>
+        <p>Unbox, taste, and learn with included care guides. Rate your fruits to help us personalize your next box.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof" id="reviews">
+    <div class="section-header">
+      <h2>What Our Customers Say</h2>
+      <p>Join 2,847 weekly subscribers discovering new fruits every week</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">Sarah M.</div>
+            <div class="testimonial-location">Denver, CO</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I've tried fruits I didn't even know existed! The rambutan was mind-blowing. My kids look forward to 'fruit box day' every week now."</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">Michael T.</div>
+            <div class="testimonial-location">Austin, TX</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"As a chef, quality matters. These fruits arrive perfectly ripe, beautifully packaged. I've started featuring them on my restaurant menu."</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">Lisa K.</div>
+            <div class="testimonial-location">Seattle, WA</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The subscription is SO worth it. Free shipping, 15% off, and I never have to think about it. Fresh exotic fruit on my doorstep every Monday."</p>
+      </div>
+    </div>
+
+    <div class="press-logos">
+      <h3>As Featured In</h3>
+      <div class="logos-grid">
+        <div class="logo">Food & Wine</div>
+        <div class="logo">Bon Appétit</div>
+        <div class="logo">The Kitchn</div>
+        <div class="logo">Eater</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <h2>Start Your Weekly Fruit Adventure</h2>
+    <p>Build your first box in 2 minutes. Free shipping on subscriptions.</p>
+    <a href="build-box.html" class="btn btn-primary" style="background: white; color: #10B981;">Build Your Box Now - $35</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>🥭 Dream Farm Trust</h3>
+        <p>Connecting you with the world's most exotic fruits, grown by family farms we trust.</p>
+        <p style="font-size: 12px; margin-top: 20px;">
+          * These statements have not been evaluated by the FDA. Our products are not intended to diagnose, treat, cure, or prevent any disease.
+        </p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Shop</h4>
+        <ul class="footer-links">
+          <li><a href="build-box.html">Build Your Box</a></li>
+          <li><a href="catalog.html">Browse All Fruits</a></li>
+          <li><a href="health-benefits.html">Health Benefits</a></li>
+          <li><a href="#subscriptions">Subscriptions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#about">Our Story</a></li>
+          <li><a href="#farms">Our Farms</a></li>
+          <li><a href="#sustainability">Sustainability</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Support</h4>
+        <ul class="footer-links">
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#shipping">Shipping Info</a></li>
+          <li><a href="#returns">Returns</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2024 Dream Farm Trust. All rights reserved. | Made with ❤️ for fruit lovers everywhere.
+    </div>
+  </footer>
+
+  <script>
+    // Scroll nav effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
